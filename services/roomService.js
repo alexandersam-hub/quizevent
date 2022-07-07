@@ -15,13 +15,16 @@ class RoomService{
         }
     }
 
-    async addRoom(room){
+    async addRoom(room,userData){
         try{
+            console.log(userData)
             if(room.id){
                 const id = room.id
+
                 if(await RoomModel.findById(id))
                     return {warning:true, message:'Комната с данным id уже существует'}
                 delete (room.id)
+                room.user = userData.id
                 const roomBd = await RoomModel.create({...room})
                 return {warning:false, room: new RoomDto(roomBd)}
             }else{

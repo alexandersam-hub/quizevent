@@ -5,6 +5,7 @@ class RoomDto{
     description
     teamsName
     type
+    user
     quiz
     countTeam
     progress
@@ -15,6 +16,7 @@ class RoomDto{
         this.id = module.id?module.id.toString():''
         this.title = module.title?module.title:''
         this.quiz = module.quiz?module.quiz:''
+        this.user = module.user?module.user:''
         this.description = module.description?module.description:''
         this.teamsName = module.teamsName?module.teamsName:[]
         this.type = module.type?module.type:''

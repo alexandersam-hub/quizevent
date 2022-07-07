@@ -5,10 +5,11 @@ const tokenService = require('../services/tokenService')
 class RoomController{
     async addRoom(req,res){
         try {
-            const {room} = req.body
+            const {room, token} = req.body
+            const userData = tokenService.validationToken(token)
             if(!room)
                 return res.json({warning:true, message:'не заполнено поле room'})
-            const result = await roomService.addRoom(room)
+            const result = await roomService.addRoom(room, userData)
 
             return res.json(result)
         }catch (e) {
