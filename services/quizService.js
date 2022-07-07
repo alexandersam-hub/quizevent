@@ -9,7 +9,7 @@ class QuizService{
             if (quizzes){
                 const quizzesDto = []
                 quizzes.forEach(quiz=>{
-                    quiz.img = quiz.img.replace('https://quizserver.vityazgroup.ru:8443', 'http://localhost:8011')
+                    quiz.img = quiz.img.replace('https://quizserver.vityazgroup.ru:8443', 'https://quizserver.vityazgroup.ru:8500')
                     quizzesDto.push({...new QuizDto(quiz)})
                 })
                 return quizzesDto

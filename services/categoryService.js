@@ -4,7 +4,7 @@ class CategoryService{
     async getCategory(){
         try{
             const newCategory = await CategoryModel.find()
-            newCategory.forEach(c=>c.img = c.img.replace('https://quizserver.vityazgroup.ru:8443', 'http://localhost:8011'))
+            newCategory.forEach(c=>c.img = c.img.replace('https://quizserver.vityazgroup.ru:8443', 'https://quizserver.vityazgroup.ru:8500'))
             return {warning:false, category:newCategory}
         }catch (e) {
             return {warning:true, message:'Ошибка БД'}
@@ -14,7 +14,7 @@ class CategoryService{
     async getCategoryByName(name){
         try{
             const category = await CategoryModel.findOne({name})
-            category.forEach(c=>c.img = c.img.replace('https://quizserver.vityazgroup.ru:8443', 'http://localhost:8011'))
+            category.forEach(c=>c.img = c.img.replace('https://quizserver.vityazgroup.ru:8443', 'https://quizserver.vityazgroup.ru:8500'))
             return {warning:false, category}
         }catch (e) {
             return {warning:true, message:'Ошибка БД'}
