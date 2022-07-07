@@ -58,8 +58,9 @@ app.use('/api/room/', roomRouter)
 const start = async ()=>{
     try {
         await mongoose.connect(process.env.DB_URL)
-        https.createServer(options, app).listen(PORT_HTTPS);
-        GameSocketController.init()
+        const server = https.createServer(options, app);
+        server.listen(PORT_HTTPS)
+        GameSocketController.init(server)
         app.listen(PORT,()=>{
             console.log(`start on port ${PORT}`)
         })

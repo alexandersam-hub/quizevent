@@ -33,9 +33,9 @@ class GameSocketController{
     // gameSocket
     rooms = {}
 
-    async init(){
+    async init(server){
         try{
-            this.ws = new WebSocketServer({port: 8100});
+            this.ws = new WebSocketServer({server, port: 8100});
             this.ws.on('connection', (ws) =>{
                 let type
                 let id = 0
@@ -97,7 +97,7 @@ class GameSocketController{
                                 id =  this.rooms[messageData.room].id
                                 this.rooms[messageData.room].id++
                                 this.sendGame(this.rooms[messageData.room],id )
-
+                                this.rooms[messageData.room].stepRound='preparation'
                             }
                             else if(messageData.type === 'admin'){
                                 this.rooms[messageData.room].adminSocket = ws
@@ -132,7 +132,7 @@ class GameSocketController{
                                     this.rooms[messageData.room].id++
                                 }
                                 this.sendGame(this.rooms[messageData.room],id )
-                                this.getScore(this.rooms[room],ws)
+                                this.getScoreWs(this.rooms[messageData.room],ws)
                                // console.log('id',id)
 
                                 // console.log(this.rooms[messageData.room].teamsName)
@@ -141,6 +141,9 @@ class GameSocketController{
                                 // id = this.rooms[messageData.room].id
                                 // this.rooms[messageData.room].id++
                                 //
+                                console.log(this.rooms[messageData.room].stepRound )
+                                if (this.rooms[messageData.room].stepRound ==='score')
+                                    this.sendScorePlayer(this.rooms[messageData.room])
                             }
                             if (this.rooms[messageData.room] && (this.rooms[messageData.room].adminSocket || this.rooms[messageData.room].gameSocket)){
                                 // console.log(this.rooms[messageData.room].adminSocket || this.rooms[messageData.room].gameSocket )
@@ -152,11 +155,13 @@ class GameSocketController{
                             break
                         case 'start':
                             this.rooms[messageData.room].isStart = true
+                            this.rooms[messageData.room].stepRound='game'
                             //this.rooms[messageData.room].score[ this.rooms[messageData.room].currentTask] = {}
                             //this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask] = {}
                             this.sendGame(this.rooms[messageData.room], id)
                             break
                         case 'finish':
+                            this.rooms[messageData.room].stepRound='finish'
                             break
                         case 'refresh':
                             break
@@ -165,11 +170,13 @@ class GameSocketController{
                             this.getScore( this.rooms[room], ws)
                             break
                         case 'view_score':
+                            this.rooms[room].stepRound ='score'
                             // console.log('view_score',this.rooms[room])
                             this.sendScorePlayer(this.rooms[room])
                             break
                         case 'answer':
                           //  console.log('answer',messageData)
+
                             if(!this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask])
                                 this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask] = {}
                             if(!this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask][messageData.token])
@@ -199,6 +206,7 @@ class GameSocketController{
                             this.sendScoreAdmin(this.rooms[messageData.room])
                             break
                         case 'next':
+                            this.rooms[messageData.room].stepRound='game'
                             this.rooms[messageData.room].currentTask++
                           //  console.log( this.rooms[messageData.room].currentTask)
                             // this.rooms[messageData.room].score[ this.rooms[messageData.room].currentTask] = {}
@@ -257,6 +265,7 @@ class GameSocketController{
             question: room.questions && [room.currentTask]?room.questions[room.currentTask]:[],
             session: room.session,
             score:room.score,
+            stepRound:room.stepRound,
             code
         }
         if(userId>=0)
@@ -305,6 +314,11 @@ class GameSocketController{
             }
             user.ws.send(JSON.stringify(message))
         })
+        const adminMessage = {  action:'score', stepRound:room.stepRound}
+        if(room.gameSocket)
+            room.gameSocket.send(JSON.stringify(adminMessage) )
+        if(room.adminSocket)
+            room.adminSocket.send(JSON.stringify(adminMessage))
 
     }
 
@@ -331,7 +345,8 @@ class GameSocketController{
                     teamsCode: room.teamsCode,
                     countsPlayerList:countsPlayerList,
                     score:room.score,
-                    countPlayerAnswer
+                    countPlayerAnswer,
+                    stepRound:room.stepRound
                 }
             }
 
@@ -354,7 +369,7 @@ class GameSocketController{
 
     }
 
-    getScore(room, ws){
+    getScore(room){
         const score = []
         // console.log('getScore')
         const teamsName = []
@@ -367,6 +382,19 @@ class GameSocketController{
             room.gameSocket.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}) )
         if(room.adminSocket)
             room.adminSocket.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}))
+    }
+
+    getScoreWs(room, ws){
+        const score = []
+        // console.log('getScore')
+        const teamsName = []
+        if(room && room.teamsCode)
+            room.teamsCode.forEach(team=>{
+                teamsName.push(team.teamName)
+                score.push(room.score[team.teamCode] && room.score[team.teamCode].last?room.score[team.teamCode].last:0)
+            })
+
+            ws.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}) )
     }
 
     async saveProgress(room, roomId){
