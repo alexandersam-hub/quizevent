@@ -35,7 +35,7 @@ class GameSocketController{
 
     async init(server){
         try{
-            this.ws = new WebSocketServer({server, port: 8100});
+            this.ws = new WebSocketServer({server});
             this.ws.on('connection', (ws) =>{
                 let type
                 let id = 0
