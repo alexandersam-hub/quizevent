@@ -23,12 +23,8 @@ class RoomService{
                 if(id!=='new' && await RoomModel.findById(id))
                     return {warning:true, message:'Комната с данным id уже существует'}
                 delete (room.id)
-
                 room.user = userData.id
-                console.log(room)
                 const roomBd = await RoomModel.create({...room})
-                console.log("roomBd",roomBd)
-                console.log(' new RoomDto(roomBd)', new RoomDto(roomBd))
                 return {warning:false, room: new RoomDto(roomBd)}
             }else{
                 return {warning:true, message:'Не заполнено поле id'}
@@ -63,9 +59,9 @@ class RoomService{
         }
     }
 
-    async getRooms(){
+    async getRooms(user){
         try{
-            const roomsBd = await RoomModel.find()
+            const roomsBd = await RoomModel.find({user})
             const rooms = []
             roomsBd.forEach((room)=>{
                 rooms.push(new RoomDto(room))

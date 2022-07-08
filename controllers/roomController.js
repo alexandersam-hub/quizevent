@@ -19,7 +19,9 @@ class RoomController{
 
     async getRooms(req,res){
         try {
-            const result = await roomService.getRooms()
+            const {token} = req.body
+            const userData = tokenService.validationToken(token)
+            const result = await roomService.getRooms(userData.id)
             return res.json(result)
         }catch (e) {
             return res.json({warning:true, message:'Ошибка сервера'})
