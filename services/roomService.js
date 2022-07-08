@@ -20,7 +20,7 @@ class RoomService{
             if(room.id){
                 const id = room.id
 
-                if(await RoomModel.findById(id))
+                if(id!=='new' && await RoomModel.findById(id))
                     return {warning:true, message:'Комната с данным id уже существует'}
                 delete (room.id)
 
