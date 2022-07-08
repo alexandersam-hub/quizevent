@@ -37,7 +37,7 @@ class SupportService{
 
             for (const post of posts) {
                 let userData
-                console.log(post)
+                // console.log(post)
                     if(post.userId === 'noname')
                         userData = {user:{username:'Пользователь еще не авторизован', description:'-'}}
                         else

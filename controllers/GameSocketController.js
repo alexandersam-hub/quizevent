@@ -49,7 +49,7 @@ class GameSocketController{
                             room = messageData.room
                             if(!this.rooms[messageData.room] && room){
                                 const roomArchive = await this.getArchive(room)
-                                console.log('!!!!')
+                               // console.log('!!!!')
                                 if (roomArchive.warning)
                                     return this.sendErrorMessage(ws, 404, id)
                                 this.rooms[messageData.room] = new RoomGame()
@@ -141,7 +141,7 @@ class GameSocketController{
                                 // id = this.rooms[messageData.room].id
                                 // this.rooms[messageData.room].id++
                                 //
-                                console.log(this.rooms[messageData.room].stepRound )
+                               // console.log(this.rooms[messageData.room].stepRound )
                                 if (this.rooms[messageData.room].stepRound ==='score')
                                     this.sendScorePlayer(this.rooms[messageData.room])
                             }

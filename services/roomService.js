@@ -62,7 +62,7 @@ class RoomService{
     async getRooms(user){
         try{
             const roomsBd = await RoomModel.find({user})
-            console.log(user)
+           // console.log(user)
             const rooms = []
             roomsBd.forEach((room)=>{
                 rooms.push(new RoomDto(room))
@@ -76,7 +76,7 @@ class RoomService{
     async getRoomsByQuizId(quizId, userId){
         try{
             const roomsBd = await RoomModel.find({quiz:quizId, user:userId})
-            console.log(userId)
+            // console.log(userId)
             const rooms = []
             roomsBd.forEach((room)=>{
                 rooms.push(new RoomDto(room))
