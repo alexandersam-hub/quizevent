@@ -169,9 +169,8 @@ class GameSocketController{
                             this.sendGame(this.rooms[messageData.room], id)
                             break
                         case 'finish':
-                            console.log('!!!')
                             this.rooms[messageData.room].stepRound='finish'
-                            this.finishSend(room)
+                            this.finishSend(messageData.room)
                             break
                         case 'refresh':
                             break
@@ -404,6 +403,7 @@ class GameSocketController{
 
 
     finishSend(room){
+        console.log('!!!!')
         const score = []
         // console.log('getScore')
 
@@ -414,13 +414,14 @@ class GameSocketController{
                 score.push(room.score[team.teamCode] && room.score[team.teamCode].current?Math.round(room.score[team.teamCode].current):0)
             })
         const message = {warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}
+        console.log(message)
         if(room.gameSocket)
             room.gameSocket.send(JSON.stringify(message) )
         if(room.adminSocket)
             room.adminSocket.send(JSON.stringify(message))
         if (room.usersSockets)
             room.usersSockets.forEach(us=>{
-                console.log(us)
+
                 if (us.ws) {
                     us.ws.send(JSON.stringify(message))
                 }
