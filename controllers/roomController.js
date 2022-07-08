@@ -30,8 +30,9 @@ class RoomController{
 
     async getRoomsByQuizId(req,res){
         try {
-            const {quiz_id} = req.body
-            const result = await roomService.getRoomsByQuizId(quiz_id)
+            const {quiz_id,token} = req.body
+            const userData = tokenService.validationToken(token)
+            const result = await roomService.getRoomsByQuizId(quiz_id, userData.id)
             return res.json(result)
         }catch (e) {
             return res.json({warning:true, message:'Ошибка сервера'})
