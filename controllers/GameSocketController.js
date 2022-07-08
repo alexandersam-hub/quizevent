@@ -417,9 +417,9 @@ class GameSocketController{
             room.gameSocket.send(JSON.stringify(message) )
         if(room.adminSocket)
             room.adminSocket.send(JSON.stringify(message))
-        if ( room.usersSockets)
+        if (room.usersSockets)
             room.usersSockets.forEach(us=>{
-                //console.log(us)
+                console.log(us)
                 if (us.ws) {
                     us.ws.send(JSON.stringify(message))
                 }
