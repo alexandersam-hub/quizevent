@@ -168,8 +168,9 @@ class GameSocketController{
                             //this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask] = {}
                             this.sendGame(this.rooms[messageData.room], id)
                             break
-                        case 'finish':
+                        case 'finish_quiz':
                             this.rooms[messageData.room].stepRound='finish'
+                            this.finishSend(room)
                             break
                         case 'refresh':
                             break
@@ -256,12 +257,6 @@ class GameSocketController{
 
     }
 
-    login(message){
-
-    }
-
-
-
     sendGame(room,  userId=-1, code=200){
         const message = {
             action:'game',
@@ -293,6 +288,7 @@ class GameSocketController{
             }
         })
     }
+
 
     sendScorePlayer(room) {
         if (!room)
@@ -387,9 +383,9 @@ class GameSocketController{
             score.push(room.score[team.teamCode] && room.score[team.teamCode].last?room.score[team.teamCode].last:0)
         })
         if(room.gameSocket)
-            room.gameSocket.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}) )
+            room.gameSocket.send(JSON.stringify({warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}) )
         if(room.adminSocket)
-            room.adminSocket.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}))
+            room.adminSocket.send(JSON.stringify({warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}))
     }
 
     getScoreWs(room, ws){
@@ -402,8 +398,34 @@ class GameSocketController{
                 score.push(room.score[team.teamCode] && room.score[team.teamCode].last?room.score[team.teamCode].last:0)
             })
 
-            ws.send(JSON.stringify({warning:false, score, teamsName, action:'get_score'}) )
+            ws.send(JSON.stringify({warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}) )
     }
+
+
+    finishSend(room){
+        const score = []
+        // console.log('getScore')
+
+        const teamsName = []
+        if(room && room.teamsCode)
+            room.teamsCode.forEach(team=>{
+                teamsName.push(team.teamName)
+                score.push(room.score[team.teamCode] && room.score[team.teamCode].current?Math.round(room.score[team.teamCode].current):0)
+            })
+        const message = {warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}
+        if(room.gameSocket)
+            room.gameSocket.send(JSON.stringify(message) )
+        if(room.adminSocket)
+            room.adminSocket.send(JSON.stringify(message))
+        if ( room.usersSockets)
+            room.usersSockets.forEach(us=>{
+                //console.log(us)
+                if (us.ws) {
+                    us.ws.send(JSON.stringify(message))
+                }
+            })
+    }
+
 
     async saveProgress(room, roomId){
         const res = await this.getArchive(roomId)
