@@ -168,7 +168,8 @@ class GameSocketController{
                             //this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask] = {}
                             this.sendGame(this.rooms[messageData.room], id)
                             break
-                        case 'finish_quiz':
+                        case 'finish':
+                            console.log('!!!')
                             this.rooms[messageData.room].stepRound='finish'
                             this.finishSend(room)
                             break
