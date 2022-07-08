@@ -17,7 +17,7 @@ class RoomService{
 
     async addRoom(room,userData){
         try{
-            console.log(userData)
+            console.log(room)
             if(room.id){
                 const id = room.id
 
