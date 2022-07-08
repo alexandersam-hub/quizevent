@@ -170,7 +170,7 @@ class GameSocketController{
                             break
                         case 'finish':
                             this.rooms[messageData.room].stepRound='finish'
-                            this.finishSend(messageData.room)
+                            this.finishSend(this.rooms[messageData.room])
                             break
                         case 'refresh':
                             break
@@ -403,7 +403,7 @@ class GameSocketController{
 
 
     finishSend(room){
-        console.log('!!!!')
+        console.log("111")
         const score = []
         // console.log('getScore')
 
