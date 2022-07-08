@@ -34,7 +34,7 @@ class RoomService{
                 return {warning:true, message:'Не заполнено поле id'}
             }
         }catch (e) {
-            return {warning:true, message:'Ошибка получения '+ e}
+            return {warning:true, message:'Ошибка записи '+ e}
         }
     }
 
