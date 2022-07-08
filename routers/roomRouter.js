@@ -11,5 +11,5 @@ router.post('/del',roomController.delRoom)
 router.post('/get_token',roomController.getTokenRoom)
 router.post('/get_room_by_id',roomController.getRoomById)
 router.post('/get_all_information',userMiddleware, roomController.getAllInformationQuiz)
-
+router.post('/reset_score', roomController.reset_score)
 module.exports = router

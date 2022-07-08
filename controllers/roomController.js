@@ -1,6 +1,6 @@
 const roomService = require('../services/roomService')
 const tokenService = require('../services/tokenService')
-    const GameSocketController = require('./GameSocketController')
+const GameSocketController = require('./GameSocketController')
 
 class RoomController{
     async addRoom(req,res){
@@ -90,6 +90,15 @@ class RoomController{
         }catch (e) {
             return res.json({warning:true, data:'Ошибка сервера'})
         }
+
+    }
+
+    async reset_score(req,res){
+        const {room} = req.body
+        GameSocketController.rooms[room.id].isStart = false
+        GameSocketController.rooms[room.id].progrss = {}
+        GameSocketController.rooms[room.id].stepRound='preparation'
+        GameSocketController.rooms[room.id].currentTask = 0
 
     }
 }
