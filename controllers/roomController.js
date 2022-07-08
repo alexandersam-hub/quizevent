@@ -96,11 +96,7 @@ class RoomController{
     async resetScore(req,res){
         try{
             const {room} = req.body
-            GameSocketController.rooms[room.id].isStart = false
-            GameSocketController.rooms[room.id].progrss = {}
-            GameSocketController.rooms[room.id].stepRound='preparation'
-            GameSocketController.rooms[room.id].currentTask = 0
-            console.log(GameSocketController.rooms[room.id],  GameSocketController.rooms[room.id].currentTask)
+            GameSocketController.resetScore(room.id)
             const result = await roomService.updateRoom(room)
             return res.json(result)
         }catch (e) {

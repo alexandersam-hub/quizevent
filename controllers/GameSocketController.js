@@ -32,6 +32,14 @@ class GameSocketController{
     // usersSockets={}
     // gameSocket
     rooms = {}
+    resetScore(roomId){
+        this.rooms[roomId].isStart = false
+        this.rooms[roomId].progrss = {}
+        this.rooms[roomId].score = {}
+        this.rooms[roomId].stepRound='preparation'
+        this.rooms[roomId].currentTask = 0
+        this.sendGame( this.rooms[roomId])
+    }
 
     async init(server){
         try{
