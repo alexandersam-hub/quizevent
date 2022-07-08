@@ -87,9 +87,9 @@ class RoomService{
         }
     }
 
-    async getAllInformation(){
+    async getAllInformation(user){
         try{
-            const roomBd = await RoomModel.find()
+            const roomBd = await RoomModel.find({user})
             const quizBd = await QuizService.getAllQuiz()
             const rooms = []
             roomBd.forEach((room)=>{

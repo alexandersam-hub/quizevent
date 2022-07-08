@@ -83,7 +83,9 @@ class RoomController{
     }
     async getAllInformationQuiz(req,res){
         try{
-            const result = await roomService.getAllInformation()
+            const {token} = req.body
+            const userData = tokenService.validationToken(token)
+            const result = await roomService.getAllInformation(userData.id)
             return res.json(result)
         }catch (e) {
             return res.json({warning:true, data:'Ошибка сервера'})
