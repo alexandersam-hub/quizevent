@@ -62,6 +62,7 @@ class RoomService{
     async getRooms(user){
         try{
             const roomsBd = await RoomModel.find({user})
+            console.log(user)
             const rooms = []
             roomsBd.forEach((room)=>{
                 rooms.push(new RoomDto(room))
