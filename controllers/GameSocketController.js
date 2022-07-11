@@ -182,6 +182,13 @@ class GameSocketController{
                             break
                         case 'view_score':
                             this.rooms[room].stepRound ='score'
+                            const price = this.rooms[room].questions[this.rooms[room].currentTask].price*10
+                            for (let i of Object.values(this.rooms[messageData.room].score) ){
+                                let newScore = 0
+                                if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
+                                    newScore = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                i.current += newScore
+                            }
                             // console.log('view_score',this.rooms[room])
                             this.sendScorePlayer(this.rooms[room])
                             break
@@ -225,15 +232,10 @@ class GameSocketController{
                           //  console.log( this.rooms[messageData.room].currentTask)
                             // this.rooms[messageData.room].score[ this.rooms[messageData.room].currentTask] = {}
                             this.rooms[messageData.room].logAnswers[this.rooms[messageData.room].currentTask] = {}
-                            const price = this.rooms[room].questions[this.rooms[room].currentTask].price*10
+
                             for (let i of Object.values(this.rooms[messageData.room].score) ){
                                i.round ++
                              //  i.current = Math.round(i.current)
-                                let newScore = 0
-                                if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
-                                    newScore = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
-                                console.log(i.right,i.mistake, i.players, newScore)
-                                i.current += newScore
                                i.last =  i.current
 
                                 i.right = 0
