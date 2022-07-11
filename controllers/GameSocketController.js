@@ -195,7 +195,7 @@ class GameSocketController{
 
 
                             if (!this.rooms[messageData.room].score[messageData.token]){
-                                this.rooms[messageData.room].score[messageData.token] = {round:0, last:0, current:0, right:0, mistake:0}
+                                this.rooms[messageData.room].score[messageData.token] = {players:0,round:0, last:0, current:0, right:0, mistake:0}
                             }
                             // if ( this.rooms[messageData.room].score[messageData.token].round+1 === this.rooms[messageData.room].currentTask ){
                             //     this.rooms[messageData.room].score[messageData.token].round++
@@ -214,6 +214,7 @@ class GameSocketController{
                                 this.rooms[messageData.room].score[messageData.token].mistake+=1
                                 this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask][messageData.token].push({answer:messageData.answer, id:messageData.userId, warning:true})
                             }
+                            this.rooms[messageData.room].score[messageData.token].players = this.rooms[messageData.room].usersSockets && this.rooms[messageData.room].usersSockets.filter(us=>us.teamCode === messageData.token )?this.rooms[messageData.room].usersSockets.filter(us=>us.teamCode === messageData.token ).length:0
                             // if(messageData.answer === this.rooms[messageData.room].questions[room.currentTask].answer)
                             //     console.log(messageData.answer, this.rooms[messageData.room].questions[room.currentTask] )
                             this.sendScoreAdmin(this.rooms[messageData.room])
@@ -227,11 +228,11 @@ class GameSocketController{
                             const price = this.rooms[room].questions[this.rooms[room].currentTask].price*10
                             for (let i of Object.values(this.rooms[messageData.room].score) ){
                                 i.round ++
-                                i.last = Math.round(i.current)
-                                // if (i.right+i.mistake>0)
-                                //     i.last = Math.round(price/(i.right+i.mistake)*i.right)
-                                // else
-                                //     i.last = 0
+                               // i.last = Math.round(i.current)
+                                if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
+                                    i.last = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                i.right = 0
+                                i.mistake = 0
                             }
                             this.sendScoreAdmin(this.rooms[room])
                             this.sendGame(this.rooms[room])
