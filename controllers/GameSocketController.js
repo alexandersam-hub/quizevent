@@ -230,7 +230,8 @@ class GameSocketController{
                                 i.round ++
                                // i.last = Math.round(i.current)
                                 if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
-                                    i.last = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                    i.current = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                i.last = i.current
                                 i.right = 0
                                 i.mistake = 0
                             }
