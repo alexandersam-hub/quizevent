@@ -206,7 +206,7 @@ class GameSocketController{
 
                                 // this.rooms[messageData.room].score[room].last = this.rooms[messageData.room].score[room].current
                                 // console.log (this.rooms[messageData.room].score[room])                        data.room.usersSockets.filter(us=>us.teamCode === teamCode.teamCode ).length
-                                this.rooms[messageData.room].score[messageData.token].current += this.rooms[room].questions[this.rooms[room].currentTask].price*10/this.rooms[messageData.room].usersSockets.filter(us=>us.teamCode === messageData.token ).length
+                              //  this.rooms[messageData.room].score[messageData.token].current += this.rooms[room].questions[this.rooms[room].currentTask].price*10/this.rooms[messageData.room].usersSockets.filter(us=>us.teamCode === messageData.token ).length
                                 this.rooms[messageData.room].score[messageData.token].right+=1
                                 this.rooms[messageData.room].logAnswers[ this.rooms[messageData.room].currentTask][messageData.token].push({answer:messageData.answer, id:messageData.userId, warning:false})
 
@@ -228,11 +228,13 @@ class GameSocketController{
                             const price = this.rooms[room].questions[this.rooms[room].currentTask].price*10
                             for (let i of Object.values(this.rooms[messageData.room].score) ){
                                i.round ++
-                               i.current = Math.round(i.current)
-                                // if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
-                                //     i.current += Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                             //  i.current = Math.round(i.current)
+                                let newScore = 0
+                                if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
+                                    newScore = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                i.current += newScore
                                i.last =  i.current
-                                
+
                                 i.right = 0
                                 i.mistake = 0
                             }
