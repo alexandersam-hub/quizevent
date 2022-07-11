@@ -190,7 +190,9 @@ class GameSocketController{
                                 i.current += newScore
                             }
                             // console.log('view_score',this.rooms[room])
+                            this.sendScoreAdmin(this.rooms[room])
                             this.sendScorePlayer(this.rooms[room])
+
                             break
                         case 'answer':
                           //  console.log('answer',messageData)
