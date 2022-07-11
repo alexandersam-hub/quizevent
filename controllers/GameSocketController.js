@@ -227,10 +227,11 @@ class GameSocketController{
                             const price = this.rooms[room].questions[this.rooms[room].currentTask].price*10
                             for (let i of Object.values(this.rooms[messageData.room].score) ){
                                 i.round ++
-                                if (i.right+i.mistake>0)
-                                    i.last = Math.round(price/(i.right+i.mistake)*i.right)
-                                else
-                                    i.last = 0
+                                i.last = Math.round(i.current)
+                                // if (i.right+i.mistake>0)
+                                //     i.last = Math.round(price/(i.right+i.mistake)*i.right)
+                                // else
+                                //     i.last = 0
                             }
                             this.sendScoreAdmin(this.rooms[room])
                             this.sendGame(this.rooms[room])
