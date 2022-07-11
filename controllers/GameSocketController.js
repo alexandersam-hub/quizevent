@@ -117,6 +117,8 @@ class GameSocketController{
 
                             else if(messageData.type === 'user'){
                                 //console.log(this.rooms[messageData.room].usersSockets.length,messageData.session, messageData.userId,this.rooms[messageData.room].session ,messageData.userId )
+                                if(!messageData.room)
+                                    return
                                 id =  this.rooms[messageData.room].id
                                 if (messageData.session
                                     && this.rooms[messageData.room].session === messageData.session
