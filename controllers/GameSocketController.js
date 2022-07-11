@@ -232,6 +232,7 @@ class GameSocketController{
                                 let newScore = 0
                                 if (i.right+i.mistake+(i.players - (i.right+i.mistake))>0)
                                     newScore = Math.round(price/(i.right+i.mistake+(i.players - (i.right+i.mistake)))*i.right)
+                                console.log(i.right,i.mistake, i.players, newScore)
                                 i.current += newScore
                                i.last =  i.current
 
