@@ -228,6 +228,7 @@ class GameSocketController{
                             }
                             this.sendScoreAdmin(this.rooms[room])
                             this.sendGame(this.rooms[room])
+                            this.getScore( this.rooms[room], ws)
                             await this.saveProgress(this.rooms[messageData.room], messageData.room)
                             break
                     }
@@ -384,10 +385,18 @@ class GameSocketController{
             teamsName.push(team.teamName)
             score.push(room.score[team.teamCode] && room.score[team.teamCode].last?room.score[team.teamCode].last:0)
         })
+        const message = {warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}
         if(room.gameSocket)
-            room.gameSocket.send(JSON.stringify({warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}) )
+            room.gameSocket.send(JSON.stringify(message) )
         if(room.adminSocket)
-            room.adminSocket.send(JSON.stringify({warning:false,stepRound:room.stepRound, score, teamsName, action:'get_score'}))
+            room.adminSocket.send(JSON.stringify(message))
+        if (room.usersSockets)
+            room.usersSockets.forEach(us=>{
+
+                if (us.ws) {
+                    us.ws.send(JSON.stringify(message))
+                }
+            })
     }
 
     getScoreWs(room, ws){
