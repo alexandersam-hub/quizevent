@@ -431,7 +431,6 @@ class GameSocketController{
 
 
     finishSend(room){
-        console.log("111")
         const score = []
         // console.log('getScore')
 
