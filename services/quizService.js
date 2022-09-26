@@ -4,6 +4,7 @@ const QuizDto = require('../dtos/QuizDto')
 class QuizService{
 
     async getAllActiveQuiz(){
+
         try {
             const quizzes = await QuizModel.find({isActive: true})
             if (quizzes){
@@ -23,6 +24,7 @@ class QuizService{
         }
     }
     async getAllQuiz(){
+
         try {
             const quizzes = await QuizModel.find()
             if (quizzes){
